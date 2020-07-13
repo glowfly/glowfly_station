@@ -1,4 +1,4 @@
-[![GPL](https://img.shields.io/github/license/glowfly/glowfly_station)](https://github.com/glowfly/glowfly_station/blob/master/LICENSE)  
+[![GPL](https://img.shields.io/github/license/glowfly/glowfly_station)](https://github.com/glowfly/glowfly_station/blob/master/LICENSE)   
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A01MQZP)
 
 # GlowFly
