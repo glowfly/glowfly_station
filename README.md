@@ -42,17 +42,17 @@ The models were designed in Fusion 360. The exported STLs are included in the Gi
 
 Before building **GlowFly** you should flash the firmware onto the Wemos D1 Mini. This way you are able to make sure that it is functional. Open the project in [Visual Studio Code](https://code.visualstudio.com/). The project uses [PlatformIO](https://platformio.org/platformio-ide) to develop the firmware. Install the PlatformIO extension into Visual Studio Code, if not already done. 
 
-To flash the firmware onto the Wemos connect it to your PC, make sure that the **-DBUILD_GlowFly** build flag is active in the *platformio.ini* file and press the *Upload* button in the status bar.
+To flash the firmware onto the Wemos connect it to your PC and press the *Upload* button in the status bar.
 
 ![GlowFly - Flash](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/flash.png)
 
-Afterwards start the *serial monitor* and you should see some outputs like in the screenshot below. If you are able to see the output, the device is working and you are ready to build **GlowFly**.
+Afterwards start the *serial monitor* and you should see some outputs like in the screenshot below. If you are able to see the output, the device is working and you are ready to build the **GlowFly Station**.
 
 ![GlowFly - Serial](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/serial.png)
 
 ### Build
 
-First of all, make yourself comfortable with the following schematics. It shows you all parts of **GlowFly** which are necessary to connect to each other. We will use a piece of stripboard for each wire which is not directly connected to the Wemos D1 Mini. Mostly to provide power to each part.
+First of all, make yourself comfortable with the following schematics. It shows you all parts of the *Station* which are necessary to connect to each other. We will use a piece of stripboard for each wire which is not directly connected to the Wemos D1 Mini. Mostly to provide power to each part.
 
 ![GlowFly - Schematics](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/GlowFly-circuit.png)
 
@@ -78,11 +78,11 @@ Solder three wires to your microphone and attach it with hotglue to the *Bottom*
 
 ![GlowFly - Mic](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/mic.jpg)
 
-At this point I advise you to build your first [MOD](#mods). A *MOD* will help to align the MOD connector correctly in the *bottom* shell.   
+At this point I advise you to build your first [MOD](https://github.com/glowfly/glowfly_mods). A *MOD* will help to align the MOD connector correctly in the *bottom* shell.   
 
 **Playing jingle ...**
 
-Now that your fist **MOD** is done, take the stripboard and create one 4x7 and one 2x5 sized piece. Picture below as a reference - pay attention to the copper line directions.
+Now that your first **MOD** is done, take the stripboard and create one 4x7 and one 2x5 sized piece. Picture below as a reference - pay attention to the copper line directions.
 
 ![GlowFly - Stripboard](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/stripboard.jpg)
 
@@ -101,4 +101,4 @@ Mount the Wemos D1 Mini to the *Bottom* part of the shell.
 ![GlowFly - Mounted](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/mounted.jpg)
 
 Power the Wemos and insert a *MOD*. You should see the *decibel* in the top right of the display. Set the gain of you microphone with a small screwdriver. It should float between -40 and -43dB in a silent room. If done, place the stripboard into the shell, place one of the *divider* parts on top of the *bottom* part, then place the *middle* part on top of it. Followed by an additional *divider* and the *top* part.
-Insert the *bolts* into the four holes and use the M2x12mm screws to close the shell.
+Insert the *bolts* into the four holes and use the M2x12mm screws to close the shell. Your **GlowFly Station** is done!
