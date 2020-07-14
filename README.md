@@ -44,39 +44,39 @@ Before building **GlowFly** you should flash the firmware onto the Wemos D1 Mini
 
 To flash the firmware onto the Wemos connect it to your PC, make sure that the **-DBUILD_GlowFly** build flag is active in the *platformio.ini* file and press the *Upload* button in the status bar.
 
-![GlowFly - Flash](https://raw.githubusercontent.com/geaz/GlowFly/master/img/flash.png)
+![GlowFly - Flash](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/flash.png)
 
 Afterwards start the *serial monitor* and you should see some outputs like in the screenshot below. If you are able to see the output, the device is working and you are ready to build **GlowFly**.
 
-![GlowFly - Serial](https://raw.githubusercontent.com/geaz/GlowFly/master/img/serial.png)
+![GlowFly - Serial](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/serial.png)
 
 ### Build
 
 First of all, make yourself comfortable with the following schematics. It shows you all parts of **GlowFly** which are necessary to connect to each other. We will use a piece of stripboard for each wire which is not directly connected to the Wemos D1 Mini. Mostly to provide power to each part.
 
-![GlowFly - Schematics](https://raw.githubusercontent.com/geaz/GlowFly/master/img/GlowFly-circuit.png)
+![GlowFly - Schematics](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/GlowFly-circuit.png)
 
 Now that you made yourself comfortable with the wiring, take the *Top* part and the *Frame* and glue them together with the superglue. I recommend to place something heavy on top to make sure that they bond well.
 
-![GlowFly - Frame Glued](https://raw.githubusercontent.com/geaz/GlowFly/master/img/frame-glued.jpg)
+![GlowFly - Frame Glued](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/frame-glued.jpg)
 
 Solder wires to your display and mount it to the *Top* part.
 
-![GlowFly - Display](https://raw.githubusercontent.com/geaz/GlowFly/master/img/display.jpg)
+![GlowFly - Display](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/display.jpg)
 
 To diffuse the LEDs a bit, the *middle* part has a small slot for a paper insert. Take a bit of paper and cut it into a narrow stripe and insert it into the slot.
 
-![GlowFly - LED Paper](https://raw.githubusercontent.com/geaz/GlowFly/master/img/led-paper.jpg)
+![GlowFly - LED Paper](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/led-paper.jpg)
 
-![GlowFly - LED Inserted](https://raw.githubusercontent.com/geaz/GlowFly/master/img/led-paper-insert.jpg)
+![GlowFly - LED Inserted](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/led-paper-insert.jpg)
 
 Solder three wires to your nine LED stripe and insert it into the *middle* part, too - **pay attention to the data line direction**. I bent the cables away from the back of the shell to avoid any possible interference between the microphone cables and the LEDs.
 
-![GlowFly - LED Inserted](https://raw.githubusercontent.com/geaz/GlowFly/master/img/led-insert.jpg)
+![GlowFly - LED Inserted](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/led-insert.jpg)
 
 Solder three wires to your microphone and attach it with hotglue to the *Bottom* part of the shell.
 
-![GlowFly - Mic](https://raw.githubusercontent.com/geaz/GlowFly/master/img/mic.jpg)
+![GlowFly - Mic](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/mic.jpg)
 
 At this point I advise you to build your first [MOD](#mods). A *MOD* will help to align the MOD connector correctly in the *bottom* shell.   
 
@@ -84,21 +84,21 @@ At this point I advise you to build your first [MOD](#mods). A *MOD* will help t
 
 Now that your fist **MOD** is done, take the stripboard and create one 4x7 and one 2x5 sized piece. Picture below as a reference - pay attention to the copper line directions.
 
-![GlowFly - Stripboard](https://raw.githubusercontent.com/geaz/GlowFly/master/img/stripboard.jpg)
+![GlowFly - Stripboard](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/stripboard.jpg)
 
 Solder the DuPont male pin header to one row of the 2x5 stripboard piece and five wires to the second row. The wires should be directed to the opposite side of the pin header and should sit flush. Otherwise the connector will not sit correctly in the cartridge slot. 
 
 Now insert the *MOD* connector into the slot of the *Bottom* part of the shell and try to insert your *MOD*. If they fit, hotglue the connector to the shell. This way the connector and the *MOD*s will align perfectly.
 
-![GlowFly - MOD Connector](https://raw.githubusercontent.com/geaz/GlowFly/master/img/mod-connector.jpg)
+![GlowFly - MOD Connector](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/mod-connector.jpg)
 
 Take the 4x7 stripboard you prepared before and solder all necessary components and wires as shown in the image below. The ground wires are only indicated (read the red comment) to keep the image tidy. Also solder every other wire like indicated in the above schematics.
 
-![GlowFly - Veroboard](https://raw.githubusercontent.com/geaz/GlowFly/master/img/murRLi-Veroboard.png)
+![GlowFly - Veroboard](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/murRLi-Veroboard.png)
 
 Mount the Wemos D1 Mini to the *Bottom* part of the shell.
 
-![GlowFly - Mounted](https://raw.githubusercontent.com/geaz/GlowFly/master/img/mounted.jpg)
+![GlowFly - Mounted](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/mounted.jpg)
 
 Power the Wemos and insert a *MOD*. You should see the *decibel* in the top right of the display. Set the gain of you microphone with a small screwdriver. It should float between -40 and -43dB in a silent room. If done, place the stripboard into the shell, place one of the *divider* parts on top of the *bottom* part, then place the *middle* part on top of it. Followed by an additional *divider* and the *top* part.
 Insert the *bolts* into the four holes and use the M2x12mm screws to close the shell.
