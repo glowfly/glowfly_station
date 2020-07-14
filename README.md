@@ -94,7 +94,7 @@ Now insert the *MOD* connector into the slot of the *Bottom* part of the shell a
 
 Take the 4x7 stripboard you prepared before and solder all necessary components and wires as shown in the image below. The ground wires are only indicated (read the red comment) to keep the image tidy. Also solder every other wire like indicated in the above schematics.
 
-![GlowFly - Veroboard](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/murRLi-Veroboard.png)
+![GlowFly - Veroboard](https://raw.githubusercontent.com/glowfly/glowfly_station/master/img/GlowFly-Veroboard.png)
 
 Mount the Wemos D1 Mini to the *Bottom* part of the shell.
 
