@@ -75,8 +75,8 @@ namespace GlowFly
         Serial.println("Connection state changed. Starting MESH_COUNT_REQUEST ...");
         if(_socketServer.getClientsCount() == 0)
         {
-            Serial.println("No clients connected!");
-            Serial.printf("GlowFly alone with %d LEDs :(\n", LED_COUNT);
+            Serial.println("No nodes connected!");
+            Serial.printf("GlowFly Station alone with %d LEDs :(\n", LED_COUNT);
             _meshLedCount = LED_COUNT;
         }
         else

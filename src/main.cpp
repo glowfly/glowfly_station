@@ -5,7 +5,7 @@ GlowFly::StationContext stationContext;
 void setup()
 {
     Serial.begin(74880);
-    Serial.println("Starting GlowFly...");
+    Serial.println("Starting GlowFly Station...");
     Wire.begin();
 
     stationContext.setup();
