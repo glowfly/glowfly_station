@@ -1,7 +1,7 @@
 #ifndef RUNMODSTATE_H
 #define RUNMODSTATE_H
 
-#include <shared_funcs.hpp>
+#include <mappings.hpp>
 #include <visualization/script_context.hpp>
 #include <visualization/frequency_analyzer.hpp>
 #include <network/websocket/commands/analyzer_source.hpp>
@@ -22,7 +22,10 @@ namespace GlowFly
             {
                 _handleId = context.getSocketServer()
                     .serverCommandEvents
-                    .addEventHandler([this](Server::Command command) { handleExternalSource(command); });
+                    .addEventHandler([this](Server::Command command) 
+                    { 
+                        handleExternalSource(command); 
+                    });
                 _runModView = std::make_shared<RunModView>();
                 _modName = _scriptContext->getModName();
             }
@@ -38,30 +41,20 @@ namespace GlowFly
             {                         
                 context.getDisplay().setView(_runModView);
                 context.getDisplay().setLeftStatus(_modName);
-                if(_scriptContext->isFaulted())
-                {
-                    context.currentState = std::make_shared<InvalidModState>();
-                    return;
-                }
                 handleMicrophoneSource(context.getSocketServer());
             }
 
+        private:
             void handleMicrophoneSource(SocketServer& socketServer)
-            {
-                if(_scriptContext->source == AnalyzerSource::Basis)
+            {   
+                if(checkScriptContext() && _scriptContext->source == AnalyzerSource::Base)
                 {
                     AnalyzerResult result = _frequencyAnalyzer.loop();
-
-                    Client::AnalyzerCommand analyzerCommand = { result.volume, result.dominantFrequency };                
                     Client::Command command = { millis(), Client::ANALYZER_UPDATE };
-                    command.analyzerCommand = analyzerCommand;
+                    command.analyzerCommand = result.ToCommand();
 
                     socketServer.broadcast(command);
-                    setView(
-                        result.decibel, 
-                        result.volume, 
-                        result.dominantFrequency, 
-                        GlowFly::getFrequencyBars(&result.fftReal[0], result.volume));
+                    setView(command.analyzerCommand);
 
                     uint32_t delta = millis() - _lastLedUpdate;
                     _lastLedUpdate = millis();
@@ -73,37 +66,43 @@ namespace GlowFly
 
             void handleExternalSource(Server::Command command)
             {
-                if(_scriptContext->source != AnalyzerSource::Basis
+                if(checkScriptContext()
+                && _scriptContext->source != AnalyzerSource::Base
                 && command.commandType == Server::CommandType::EXTERNAL_ANALYZER)
-                {
-                    Server::ExternalAnalyzerCommand externalCommand = command.externalAnalyzerCommand;
-                    Client::AnalyzerCommand analyzerCommand = { externalCommand.volume, externalCommand.frequency };                
+                {         
                     Client::Command command = { millis(), Client::ANALYZER_UPDATE };
-                    command.analyzerCommand = analyzerCommand;
+                    command.analyzerCommand = command.analyzerCommand;
 
                     _context.getSocketServer().broadcast(command);
-                    setView(
-                        externalCommand.decibel, 
-                        externalCommand.volume, 
-                        externalCommand.frequency,
-                        externalCommand.buckets);
+                    setView(command.analyzerCommand);
 
                     uint32_t delta = millis() - _lastLedUpdate;
                     _lastLedUpdate = millis();
 
-                    _scriptContext->updateAnalyzerResult(externalCommand.volume, externalCommand.frequency);
+                    _scriptContext->updateAnalyzerResult(command.analyzerCommand.volume, command.analyzerCommand.frequency);
                     _scriptContext->run(delta);
                 }
             }
 
-        private:
-            void setView(const float decibel, const uint16_t volume, const uint16_t dominantFrequency, const std::array<uint8_t, BAR_COUNT> buckets)
+            bool checkScriptContext()
             {
-                _runModView->decibel = decibel;
-                if(volume > 0 && dominantFrequency > 0)
+                bool valid = true;
+                if(_scriptContext->isFaulted())
                 {
-                    _runModView->dominantFrequency = dominantFrequency;
-                    _runModView->frequencyRange = buckets;
+                    _context.currentState = std::make_shared<InvalidModState>();
+                    valid = false;
+                }
+                return valid;
+            }
+
+            void setView(AnalyzerCommand command)
+            {
+                _runModView->volume = command.volume;
+                _runModView->decibel = command.decibel;
+                if(command.volume > 0 && command.frequency > 0)
+                {
+                    _runModView->dominantFrequency = command.frequency;
+                    _runModView->setFreqBars(command.freqBins);
                 }
                 else
                 {

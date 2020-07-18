@@ -1,6 +1,7 @@
 #ifndef RUNMODVIEW_H
 #define RUNMODVIEW_H
 
+#include <mappings.hpp>
 #include "hardware/display/view.hpp"
 #include "hardware/display/display.hpp"
 
@@ -13,15 +14,15 @@ namespace GlowFly
             {
                 for(uint8_t i = 0; i < BAR_COUNT; i++)
                 {
-                    frequencyRange[i] = 0;
+                    _freqBars[i] = 0;
                 }
             }
 
             void drawFrame(DisplayCtrl& display) override
             {
-                for(uint8_t i = 0; i < frequencyRange.size(); i++)
+                for(uint8_t i = 0; i < _freqBars.size(); i++)
                 {
-                    drawFrequencyBar(display, i, frequencyRange[i]);
+                    drawFrequencyBar(display, i, _freqBars[i]);
                 }
 
                 display.setFontPosTop();
@@ -49,15 +50,28 @@ namespace GlowFly
 
             void fadeFrequencyRange()
             {
-                for(uint8_t i = 0; i < frequencyRange.size(); i++)
+                for(uint8_t i = 0; i < _freqBars.size(); i++)
                 {
-                    if(frequencyRange[i] > 0) frequencyRange[i]--;
+                    if(_freqBars[i] > 0) _freqBars[i]--;
+                }
+            }
+
+            void setFreqBars(std::array<uint8_t, 32> freqBins)
+            {
+                _freqBars = GlowFly::mapa<uint8_t, BAR_COUNT, uint8_t, 32>(freqBins, BAR_HEIGHT);
+                
+                float volumeMultiplier = volume < 50
+                    ? 0.5f
+                    : volume / 100.0f;
+                for(uint8_t i = 0; i < BAR_COUNT; i++)
+                {
+                    _freqBars[i] *= volumeMultiplier;
                 }
             }
             
+            uint8_t volume = 0;
             float decibel = 0.0;
             uint16_t dominantFrequency = 0;
-            std::array<uint8_t, BAR_COUNT> frequencyRange;
 
         private:
             /**
@@ -74,9 +88,10 @@ namespace GlowFly
                 }
             }
 
-            bool _strPosCalculated = false;
-            uint8_t _freqStrXPos = 0;
             uint8_t _volStrXPos = 0;
+            uint8_t _freqStrXPos = 0;
+            bool _strPosCalculated = false;
+            std::array<uint8_t, BAR_COUNT> _freqBars;
     };
 }
 

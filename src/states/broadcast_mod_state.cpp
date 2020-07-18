@@ -51,9 +51,9 @@ namespace GlowFly
                     scriptContext->updateLedInfo(0, 0, context.getMeshLedCount());
                     scriptContext->init();
 
-                    Client::AnalyzerCommand analyzerCommand = { scriptContext->source };
+                    Client::SourceCommand sourceCommand = { scriptContext->source };
                     Client::Command command = { millis(), Client::SOURCE_UPDATE };
-                    command.analyzerCommand = analyzerCommand;
+                    command.sourceCommand = sourceCommand;
                     context.getSocketServer().broadcast(command);
 
                     context.getLed().setAllLeds(GlowFly::Black);
