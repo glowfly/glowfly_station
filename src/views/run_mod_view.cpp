@@ -56,7 +56,7 @@ namespace GlowFly
                 }
             }
 
-            void setFreqBars(std::array<uint8_t, 32> freqBins)
+            void setFreqBars(std::array<uint8_t, 32>& freqBins)
             {
                 _freqBars = GlowFly::mapa<uint8_t, BAR_COUNT, uint8_t, 32>(freqBins, BAR_HEIGHT);
                 

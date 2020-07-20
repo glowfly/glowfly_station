@@ -64,14 +64,14 @@ namespace GlowFly
                 }
             }
 
-            void handleExternalSource(Server::Command command)
+            void handleExternalSource(Server::Command& serverCommand)
             {
                 if(checkScriptContext()
                 && _scriptContext->source != AnalyzerSource::Base
-                && command.commandType == Server::CommandType::EXTERNAL_ANALYZER)
-                {         
+                && serverCommand.commandType == Server::CommandType::EXTERNAL_ANALYZER)
+                {
                     Client::Command command = { millis(), Client::ANALYZER_UPDATE };
-                    command.analyzerCommand = command.analyzerCommand;
+                    command.analyzerCommand = serverCommand.analyzerCommand;
 
                     _context.getSocketServer().broadcast(command);
                     setView(command.analyzerCommand);
@@ -95,7 +95,7 @@ namespace GlowFly
                 return valid;
             }
 
-            void setView(AnalyzerCommand command)
+            void setView(AnalyzerCommand& command)
             {
                 _runModView->volume = command.volume;
                 _runModView->decibel = command.decibel;
