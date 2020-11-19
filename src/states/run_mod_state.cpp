@@ -4,7 +4,7 @@
 #include <mappings.hpp>
 #include <visualization/script_context.hpp>
 #include <visualization/frequency_analyzer.hpp>
-#include <network/websocket/commands/analyzer_source.hpp>
+#include <network/websocket/commands/analyzer_command.hpp>
 #include <network/websocket/commands/server_commands.hpp>
 
 #include "state.hpp"
