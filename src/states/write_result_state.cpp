@@ -6,7 +6,7 @@
 #include "../station_context.hpp"
 #include "../views/icon_text_view.cpp"
 
-namespace GlowFly
+namespace SyncBlink
 {
     class WriteResultState : public State
     {
@@ -27,8 +27,8 @@ namespace GlowFly
             {      
                 context.getDisplay().setView(_resultView);
                 
-                if(_success) context.getLed().setAllLeds(GlowFly::Green);
-                else context.getLed().setAllLeds(GlowFly::Red);
+                if(_success) context.getLed().setAllLeds(SyncBlink::Green);
+                else context.getLed().setAllLeds(SyncBlink::Red);
 
                 if(_started + 2000 < millis())
                 {

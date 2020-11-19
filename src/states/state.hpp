@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace GlowFly
+namespace SyncBlink
 {
     class StationContext;
     class State

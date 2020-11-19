@@ -12,7 +12,7 @@
 #include "../station_context.hpp"
 #include "../views/run_mod_view.cpp"
 
-namespace GlowFly
+namespace SyncBlink
 {
     class RunModState : public State
     {

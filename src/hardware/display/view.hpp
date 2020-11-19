@@ -3,7 +3,7 @@
 
 #include <U8g2lib.h>
 
-namespace GlowFly
+namespace SyncBlink
 {
     typedef U8G2_SH1106_128X64_NONAME_F_4W_HW_SPI DisplayCtrl;
     

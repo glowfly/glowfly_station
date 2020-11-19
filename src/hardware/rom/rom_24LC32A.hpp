@@ -4,7 +4,7 @@
 #include <Wire.h>
 #include <Arduino.h>
 
-namespace GlowFly
+namespace SyncBlink
 {
     const uint16_t ModMemorySize = 0xFA0; // 4000 Byte
 

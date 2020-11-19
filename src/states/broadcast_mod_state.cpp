@@ -8,7 +8,7 @@
 #include "../station_context.hpp"
 #include "../views/icon_text_view.cpp"
 
-namespace GlowFly
+namespace SyncBlink
 {
     class BroadcastModState : public State
     {
@@ -34,7 +34,7 @@ namespace GlowFly
 
             void run(StationContext& context)
             {                         
-                context.getLed().setAllLeds(GlowFly::Yellow);
+                context.getLed().setAllLeds(SyncBlink::Yellow);
                 context.getDisplay().setView(_broadcastModView);
                 context.getDisplay().loop();
 
@@ -56,7 +56,7 @@ namespace GlowFly
                     command.sourceCommand = sourceCommand;
                     context.getSocketServer().broadcast(command);
 
-                    context.getLed().setAllLeds(GlowFly::Black);
+                    context.getLed().setAllLeds(SyncBlink::Black);
                     context.currentState = std::make_shared<RunModState>(context, scriptContext);
 
                     _modDistributed = false;

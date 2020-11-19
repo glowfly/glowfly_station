@@ -4,7 +4,7 @@
 #include "hardware/display/view.hpp"
 #include "hardware/display/display.hpp"
 
-namespace GlowFly
+namespace SyncBlink
 {
     class SplashView : public View
     {
@@ -12,7 +12,7 @@ namespace GlowFly
             void drawFrame(DisplayCtrl& display) override
             {
                 display.setFont(u8g2_font_maniac_tf);
-                drawVHCenteredStr(display, "GlowFly");
+                drawVHCenteredStr(display, "syncBlink");
             }
     };
 }

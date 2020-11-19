@@ -7,7 +7,7 @@
 #include "../station_context.hpp"
 #include "../views/icon_text_view.cpp"
 
-namespace GlowFly
+namespace SyncBlink
 {
     class ReceiveLengthState : public State
     {
@@ -19,7 +19,7 @@ namespace GlowFly
 
             void run(StationContext& context)
             {          
-                context.getLed().setAllLeds(GlowFly::Cyan);
+                context.getLed().setAllLeds(SyncBlink::Cyan);
                 context.getDisplay().setView(_writeModView);
                 context.getDisplay().loop();
                                 

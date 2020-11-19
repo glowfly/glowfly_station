@@ -7,7 +7,7 @@
 #include "../station_context.hpp"
 #include "../views/icon_text_view.cpp"
 
-namespace GlowFly
+namespace SyncBlink
 {
     class ReceiveModState : public State
     {

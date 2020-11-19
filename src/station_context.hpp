@@ -3,15 +3,15 @@
 
 #include <memory>
 #include <led/led.hpp>
-#include <network/mesh/glowfly_mesh.hpp>
+#include <network/mesh/syncblink_mesh.hpp>
 #include <network/websocket/socket_server.hpp>
-#include <network/webserver/glowfly_web.hpp>
+#include <network/webserver/syncblink_web.hpp>
 
 #include "states/state.hpp"
 #include "hardware/display/display.hpp"
 #include "hardware/rom/rom_24LC32A.hpp"
 
-namespace GlowFly
+namespace SyncBlink
 {
     class StationContext
     {
@@ -42,8 +42,8 @@ namespace GlowFly
             void onSocketServerCommandReceived(Server::Command command);
 
             LED _led;
-            GlowFlyWeb _web;
-            GlowFlyMesh _mesh;
+            SyncBlinkWeb _web;
+            SyncBlinkMesh _mesh;
             Display _display;
             SocketServer _socketServer;
             Rom24LC32A _rom = Rom24LC32A(0x50);

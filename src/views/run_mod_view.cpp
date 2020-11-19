@@ -5,7 +5,7 @@
 #include "hardware/display/view.hpp"
 #include "hardware/display/display.hpp"
 
-namespace GlowFly
+namespace SyncBlink
 {
     class RunModView : public View
     {
@@ -58,7 +58,7 @@ namespace GlowFly
 
             void setFreqBars(std::array<uint8_t, 32>& freqBins)
             {
-                _freqBars = GlowFly::mapa<uint8_t, BAR_COUNT, uint8_t, 32>(freqBins, BAR_HEIGHT);
+                _freqBars = SyncBlink::mapa<uint8_t, BAR_COUNT, uint8_t, 32>(freqBins, BAR_HEIGHT);
                 
                 float volumeMultiplier = volume < 50
                     ? 0.5f

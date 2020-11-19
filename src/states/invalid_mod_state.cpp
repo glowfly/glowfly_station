@@ -5,7 +5,7 @@
 #include "../station_context.hpp"
 #include "../views/icon_text_view.cpp"
 
-namespace GlowFly
+namespace SyncBlink
 {
     class InvalidModState : public State
     {
@@ -17,7 +17,7 @@ namespace GlowFly
 
             void run(StationContext& context)
             {
-                context.getLed().setAllLeds(GlowFly::Red);
+                context.getLed().setAllLeds(SyncBlink::Red);
                 context.getDisplay().setView(_invalidModView);
             }
 

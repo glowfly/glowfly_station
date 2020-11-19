@@ -3,7 +3,7 @@
 #include "states/receive_length_state.cpp"
 #include "views/splash_view.cpp"
 
-namespace GlowFly
+namespace SyncBlink
 {
     StationContext::StationContext()
     {
@@ -14,7 +14,7 @@ namespace GlowFly
     void StationContext::setup()
     {
         _display.init();
-        _display.setView(std::make_shared<GlowFly::SplashView>());
+        _display.setView(std::make_shared<SyncBlink::SplashView>());
         _display.loop();
         
         _socketServer
@@ -76,7 +76,7 @@ namespace GlowFly
         if(_socketServer.getClientsCount() == 0)
         {
             Serial.println("No nodes connected!");
-            Serial.printf("GlowFly Station alone with %d LEDs :(\n", LED_COUNT);
+            Serial.printf("SyncBlink Station alone with %d LEDs :(\n", LED_COUNT);
             _meshLedCount = LED_COUNT;
         }
         else

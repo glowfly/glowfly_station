@@ -8,7 +8,7 @@
 #include "../station_context.hpp"
 #include "../views/icon_text_view.cpp"
 
-namespace GlowFly
+namespace SyncBlink
 {
     class ReadModState : public State
     {
@@ -20,7 +20,7 @@ namespace GlowFly
 
             void run(StationContext& context)
             {                         
-                context.getLed().setAllLeds(GlowFly::Yellow);
+                context.getLed().setAllLeds(SyncBlink::Yellow);
                 context.getLed().loop();
                 context.getDisplay().setView(_readModView);
                 context.getDisplay().loop();

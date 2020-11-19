@@ -1,6 +1,6 @@
 #include "display.hpp"
 
-namespace GlowFly
+namespace SyncBlink
 {
     Display::Display() : _ctrl(U8G2_R0,/* cs=*/ D8,/* dc=*/ D0,/* reset=*/ D3) { }
 

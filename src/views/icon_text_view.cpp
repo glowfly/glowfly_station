@@ -4,7 +4,7 @@
 #include "hardware/display/view.hpp"
 #include "hardware/display/display.hpp"
 
-namespace GlowFly
+namespace SyncBlink
 {
     class IconTextView : public View
     {

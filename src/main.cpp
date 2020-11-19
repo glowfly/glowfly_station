@@ -1,11 +1,11 @@
 #include "station_context.hpp"
 
-GlowFly::StationContext stationContext;
+SyncBlink::StationContext stationContext;
 
 void setup()
 {
     Serial.begin(74880);
-    Serial.println("Starting GlowFly Station...");
+    Serial.println("Starting SyncBlink Station...");
     Wire.begin();
 
     stationContext.setup();

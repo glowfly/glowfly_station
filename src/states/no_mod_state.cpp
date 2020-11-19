@@ -9,7 +9,7 @@
 #include "../station_context.hpp"
 #include "../views/insert_mod_view.cpp"
 
-namespace GlowFly
+namespace SyncBlink
 {
     class NoModState : public State
     {
@@ -17,7 +17,7 @@ namespace GlowFly
             NoModState()
             {
                 _insertModView = std::make_shared<InsertModView>();
-                _fadePattern = std::make_shared<LedFadePattern>(GlowFly::Yellow);
+                _fadePattern = std::make_shared<LedFadePattern>(SyncBlink::Yellow);
             }
 
             void run(StationContext& context)

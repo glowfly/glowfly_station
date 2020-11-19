@@ -1,6 +1,6 @@
 #include "rom_24LC32A.hpp"
 
-namespace GlowFly
+namespace SyncBlink
 {
     Rom24LC32A::Rom24LC32A(const uint8_t deviceAddress) : _deviceAddress(deviceAddress) {}
 
