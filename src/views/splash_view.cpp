@@ -11,7 +11,7 @@ namespace SyncBlink
         public:
             void drawFrame(DisplayCtrl& display) override
             {
-                display.setFont(u8g2_font_maniac_tf);
+                display.setFont(u8g2_font_tenfatguys_tr);
                 drawVHCenteredStr(display, "syncBlink");
             }
     };
