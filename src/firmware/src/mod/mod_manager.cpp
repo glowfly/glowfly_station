@@ -10,10 +10,10 @@ namespace SyncBlink
         mod.Name = modName;
         mod.Exists = true;
 
-        String path = "/mods/" + String(modName.c_str());
-        if(LittleFS.exists(path))
+        std::string path = "/mods/" + modName;
+        if(LittleFS.exists(path.c_str()))
         {
-            File file = LittleFS.open(path, "r");
+            File file = LittleFS.open(path.c_str(), "r");
             while (file.available()) {
                 mod.Content = file.readString().c_str();
             }
@@ -42,13 +42,13 @@ namespace SyncBlink
 
     void ModManager::add(std::string& modName)
     {
-        File file = LittleFS.open("/mods/" + String(modName.c_str()), "w");
+        File file = LittleFS.open(("/mods/" + modName).c_str(), "w");
         file.close();
     }
 
     void ModManager::save(std::string modName, std::string modContent)
     {
-        File file = LittleFS.open("/mods/" + String(modName.c_str()), "w");
+        File file = LittleFS.open(("/mods/" + modName).c_str(), "w");
         file.print(modContent.c_str());
         file.close();
 
@@ -60,7 +60,7 @@ namespace SyncBlink
 
     void ModManager::remove(std::string& modName)
     {
-        LittleFS.remove("/mods/" + String(modName.c_str()));
+        LittleFS.remove(("/mods/" + modName).c_str());
     }
 
     std::string ModManager::getActiveModName()
@@ -83,7 +83,7 @@ namespace SyncBlink
                 activeMod = getActiveModName();
             }
         }
-        return activeMod;
+        return activeMod.c_str();
     }
 
     void ModManager::saveActiveModName(std::string modName)

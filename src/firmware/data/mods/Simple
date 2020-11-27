@@ -17,4 +17,4 @@ function update(delta){
     setAllLeds(color);
 }
 
-function getName() { return "easyMod"; }
+function getName() { return "simpleMod"; }
