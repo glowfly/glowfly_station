@@ -6,7 +6,7 @@ namespace SyncBlink
 {
     StationContext::StationContext() : _web(_wifi, _modManager)
     {
-        currentState = std::make_shared<ReadModState>(_modManager);;
+        resetState();
     }
 
     void StationContext::setup()
@@ -35,6 +35,11 @@ namespace SyncBlink
         _led.loop();
         _web.loop();
         _display.loop();
+    }
+
+    void StationContext::resetState() 
+    { 
+        currentState = std::make_shared<ReadModState>(); 
     }
 
     void StationContext::startMeshCount()
@@ -82,7 +87,7 @@ namespace SyncBlink
                 break;
             case Server::MESH_UPDATED:
                 Serial.println("Mesh updated - Resetting state ...");
-                currentState = std::make_shared<ReadModState>(_modManager);
+                currentState = std::make_shared<ReadModState>();
                 break;
             case Server::EXTERNAL_ANALYZER:
             case Server::MOD_DISTRIBUTED:
@@ -92,6 +97,7 @@ namespace SyncBlink
 
     LED& StationContext::getLed() { return _led; }
     Display& StationContext::getDisplay() { return _display; }
+    ModManager& StationContext::getModManager() { return _modManager; }
     uint32_t StationContext::getMeshLedCount() { return _meshLedCount; }
     SocketServer& StationContext::getSocketServer() { return _socketServer; }
 }

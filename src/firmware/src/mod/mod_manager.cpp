@@ -51,6 +51,11 @@ namespace SyncBlink
         File file = LittleFS.open("/mods/" + String(modName.c_str()), "w");
         file.print(modContent.c_str());
         file.close();
+
+        if(getActiveModName() == modName)
+        {
+            for(auto event : activeModChangedEvents.getEventHandlers()) event.second();
+        }
     }
 
     void ModManager::remove(std::string& modName)
@@ -92,6 +97,7 @@ namespace SyncBlink
             for (uint i = 0; i < modName.length(); ++i) EEPROM.write(i + 96, modName[i]);
 
             EEPROM.commit();
+            for(auto event : activeModChangedEvents.getEventHandlers()) event.second();
         }
     }
 

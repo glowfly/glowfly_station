@@ -20,17 +20,17 @@ namespace SyncBlink
 
             void setup();
             void loop();
+            void resetState();
 
             LED& getLed();
             Display& getDisplay();
             uint32_t getMeshLedCount();
+            ModManager& getModManager();
             SocketServer& getSocketServer();
 
             std::shared_ptr<State> currentState;
 
         private:
-            void checkModuleInserted();
-
             void startMeshCount();
             void onSocketServerMeshConnection();
             void onSocketServerCommandReceived(Server::Command command);

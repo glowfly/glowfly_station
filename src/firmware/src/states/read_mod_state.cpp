@@ -16,9 +16,8 @@ namespace SyncBlink
     class ReadModState : public State
     {
         public:
-            ReadModState(ModManager& modManager)
+            ReadModState()
             {
-                _modManager = modManager;
                 _readModView = std::make_shared<IconTextView>("Reading MOD ...", u8g2_font_open_iconic_thing_2x_t, 74);
             }
 
@@ -29,8 +28,8 @@ namespace SyncBlink
                 context.getDisplay().setView(_readModView);
                 context.getDisplay().loop();
 
-                std::string activeModName = _modManager.getActiveModName();
-                Mod activeMod = _modManager.get(activeModName);
+                std::string activeModName = context.getModManager().getActiveModName();
+                Mod activeMod = context.getModManager().get(activeModName);
 
                 if(activeMod.Exists)
                 {
@@ -57,8 +56,7 @@ namespace SyncBlink
                 }
                 return isEmptyMod;
             }
-
-            ModManager _modManager;
+            
             std::shared_ptr<IconTextView> _readModView;
     };
 }

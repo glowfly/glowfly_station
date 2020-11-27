@@ -29,8 +29,8 @@ namespace SyncBlink
             void setModSettings();
 
             ESP8266WebServer _server;
-            StationWifi _stationWifi;
-            ModManager _modManager;
+            StationWifi& _stationWifi;
+            ModManager& _modManager;
     };
 }
 

@@ -4,10 +4,13 @@
 #include <vector>
 #include <string>
 #include <network/websocket/commands/analyzer_command.hpp>
+#include <event_registration.hpp>
 #include "mod.hpp"
 
 namespace SyncBlink
 {
+    typedef std::function<void()> ActiveModChangedEvent;
+
     class ModManager
     {
         public:
@@ -24,7 +27,10 @@ namespace SyncBlink
             AnalyzerSource getActiveSource();
             void saveActiveSource(AnalyzerSource source);
 
-            bool activeModChanged = false;
+            EventRegistration<ActiveModChangedEvent> activeModChangedEvents;
+
+        private:
+            bool _activeModChanged = false;
     };
 }
 

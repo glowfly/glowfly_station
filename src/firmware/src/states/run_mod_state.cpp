@@ -8,9 +8,9 @@
 #include <network/websocket/commands/server_commands.hpp>
 
 #include "state.hpp"
-#include "invalid_mod_state.cpp"
-#include "../station_context.hpp"
-#include "../views/run_mod_view.cpp"
+#include "states/invalid_mod_state.cpp"
+#include "station_context.hpp"
+#include "views/run_mod_view.cpp"
 
 namespace SyncBlink
 {
@@ -20,11 +20,17 @@ namespace SyncBlink
             RunModState(StationContext& context, std::shared_ptr<ScriptContext> scriptContext) 
                 : _context(context), _scriptContext(scriptContext)
             {
-                _handleId = context.getSocketServer()
+                _socketEventHandleId = context.getSocketServer()
                     .serverCommandEvents
                     .addEventHandler([this](Server::Command command) 
                     { 
                         handleExternalSource(command); 
+                    });
+                _modEventHandleId = context.getModManager()
+                    .activeModChangedEvents
+                    .addEventHandler([this]() 
+                    {
+                        _activeModChanged = true;
                     });
                 _runModView = std::make_shared<RunModView>();
                 _modName = _scriptContext->getModName();
@@ -34,14 +40,19 @@ namespace SyncBlink
             {
                 _context.getSocketServer()
                     .serverCommandEvents
-                    .removeEventHandler(_handleId);
+                    .removeEventHandler(_socketEventHandleId);
+                _context.getModManager()
+                    .activeModChangedEvents
+                    .removeEventHandler(_modEventHandleId);
             }
 
             void run(StationContext& context)
             {                         
                 context.getDisplay().setView(_runModView);
                 context.getDisplay().setLeftStatus(_modName);
-                handleMicrophoneSource(context.getSocketServer());
+                
+                if(_activeModChanged) context.resetState();
+                else handleMicrophoneSource(context.getSocketServer());
             }
 
         private:
@@ -114,8 +125,9 @@ namespace SyncBlink
             StationContext& _context;
             std::shared_ptr<ScriptContext> _scriptContext;
             std::shared_ptr<RunModView> _runModView;
-            uint64_t _handleId = 0;
+            uint64_t _socketEventHandleId = 0, _modEventHandleId = 0;
             std::string _modName;
+            bool _activeModChanged = false;
 
             FrequencyAnalyzer _frequencyAnalyzer;
             uint64_t _lastLedUpdate = millis();
