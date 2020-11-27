@@ -6,8 +6,8 @@
                     <a id="header-logo" href="/" title="Mods"><img alt="syncBlink Logo" src="./../assets/logo.png"></a>
                 </div>
                 <nav id="nav">
-                    <router-link class="menu-item" to="/">Mods</router-link>
-                    <router-link class="menu-item" to="/settings">Settings</router-link>
+                    <router-link class="menu-item" to="/">Settings</router-link>
+                    <router-link class="menu-item only-desktop" to="/mods">Mods</router-link>
                 </nav>
             </div>
         </header>
@@ -117,5 +117,11 @@
             "header"
             "main"
             "footer";
+    }
+
+    @media only screen and (max-width: 600px) {
+        .only-desktop {
+            display: none;
+        }
     }
 </style>

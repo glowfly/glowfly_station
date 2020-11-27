@@ -4,7 +4,7 @@
 
 namespace SyncBlink
 {
-    StationContext::StationContext() : _web(_wifi)
+    StationContext::StationContext() : _web(_wifi, _modManager)
     {
         currentState = std::make_shared<ReadModState>(_modManager);;
     }

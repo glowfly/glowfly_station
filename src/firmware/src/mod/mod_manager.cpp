@@ -46,10 +46,10 @@ namespace SyncBlink
         file.close();
     }
 
-    void ModManager::save(Mod& mod)
+    void ModManager::save(std::string modName, std::string modContent)
     {
-        File file = LittleFS.open("/mods/" + String(mod.Name.c_str()), "w");
-        file.print(mod.Content.c_str());
+        File file = LittleFS.open("/mods/" + String(modName.c_str()), "w");
+        file.print(modContent.c_str());
         file.close();
     }
 
@@ -65,11 +65,12 @@ namespace SyncBlink
         {
             activeMod += char(EEPROM.read(i));
         }
+        Serial.printf("Saved Active MOD: %s\n", activeMod.c_str());
 
         Mod mod = get(activeMod);
         if(!mod.Exists) 
         {
-            Serial.printf("Currently active mod not found! Falling back ...");
+            Serial.println("Currently active mod not found! Falling back ...");
             std::vector<std::string> modList = getList();
             if(modList.size() > 0)
             {
@@ -77,8 +78,6 @@ namespace SyncBlink
                 activeMod = getActiveModName();
             }
         }
-
-        Serial.printf("Active MOD: %s\n", activeMod.c_str());
         return activeMod;
     }
 
@@ -91,6 +90,25 @@ namespace SyncBlink
 
             Serial.printf("Saving active Mod (%s) ...\n", modName.c_str());
             for (uint i = 0; i < modName.length(); ++i) EEPROM.write(i + 96, modName[i]);
+
+            EEPROM.commit();
         }
+    }
+
+    AnalyzerSource ModManager::getActiveSource()
+    {
+        uint rawSource = EEPROM.read(193);
+        if(rawSource != 0 && rawSource != 1) {
+            Serial.println("Currently active source not valid! Falling back ...");
+            saveActiveSource(AnalyzerSource::Base);
+        }
+        return static_cast<AnalyzerSource>(EEPROM.read(193));
+    }
+
+    void ModManager::saveActiveSource(AnalyzerSource source)
+    {
+        Serial.printf("Saving active Source (%d) ...\n", source);
+        EEPROM.write(193, static_cast<uint>(source));
+        EEPROM.commit();
     }
 }

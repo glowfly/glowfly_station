@@ -8,13 +8,13 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    name: "Mods",
-    component: Mods
-  },
-  {
-    path: "/settings",
     name: "Settings",
     component: Settings
+  },
+  {
+    path: "/mods",
+    name: "Mods",
+    component: Mods
   }
 ];
 

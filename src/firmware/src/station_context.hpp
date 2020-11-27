@@ -38,9 +38,10 @@ namespace SyncBlink
             LED _led;
             Display _display;
             StationWifi _wifi;
-            SyncBlinkWeb _web;
-            SocketServer _socketServer;
             ModManager _modManager;
+            SocketServer _socketServer;
+            
+            SyncBlinkWeb _web;
 
             uint32_t _meshLedCount = LED_COUNT;
     };
