@@ -95,7 +95,18 @@ Insert the *bolts* into the four holes and use the M2x12mm screws to close the s
 
 ### The Application
 
-[TODO]
+The **syncBlink Station** provides a web application to program MODs, change the running MOD, setting the WiFi connection and more.
+After the first boot of the station, it will create a Hotspot. Please connect another device (PC, Tabled, Mobile) directly to this hotspot an use the following password: *SyncBlinkSaysLetThereBeLight!*
+Open an internet browser and connect to: *http://192.168.1.1* 
+
+![syncBlink - Settings](https://raw.githubusercontent.com/syncBlink/station/master/img/web-1.jpg)
+
+On the settings page you are able to enter your WiFi credentials to connect **syncBlink** to your home network. **syncBlink** will reboot after saving new WiFi settings and tries to connect to the network.
+On success, **syncBlink** shows the own IP address at the bottom right on the display.
+
+On the **MODs** page, it is possible to create, edit and delete MODs for **syncBlink**.
+
+![syncBlink - Settings](https://raw.githubusercontent.com/syncBlink/station/master/img/web-2.jpg)
 
 ### Create MODs
 
