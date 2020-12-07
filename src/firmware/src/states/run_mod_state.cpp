@@ -58,7 +58,7 @@ namespace SyncBlink
         private:
             void handleMicrophoneSource(SocketServer& socketServer)
             {   
-                if(checkScriptContext() && _scriptContext->source == AnalyzerSource::Base)
+                if(checkScriptContext() && _scriptContext->source == AnalyzerSource::Station)
                 {
                     AnalyzerResult result = _frequencyAnalyzer.loop();
                     Client::Command command = { millis(), Client::ANALYZER_UPDATE };
@@ -78,7 +78,7 @@ namespace SyncBlink
             void handleExternalSource(Server::Command& serverCommand)
             {
                 if(checkScriptContext()
-                && _scriptContext->source != AnalyzerSource::Base
+                && _scriptContext->source != AnalyzerSource::Station
                 && serverCommand.commandType == Server::CommandType::EXTERNAL_ANALYZER)
                 {
                     Client::Command command = { millis(), Client::ANALYZER_UPDATE };

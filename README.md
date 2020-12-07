@@ -29,7 +29,6 @@ The models were designed in Fusion 360. The exported STLs are included in the Gi
 
 - 3D Printed Parts
 - 1x Wemos D1 Mini
-- 1x 1K Resistor
 - 1x Capacitor 680uF
 - 1x MAX4466
 - [9x WS2812B LEDs (I used a strip and cut it)](https://www.amazon.de/dp/B01CDTED80)
@@ -83,7 +82,7 @@ Solder three wires to your microphone and attach it with hotglue to the *Bottom*
 ![syncBlink - Mic](https://raw.githubusercontent.com/syncBlink/station/master/img/mic.jpg)
 
 Create a 2x7 sized piece out of the stripboard. Picture below as a reference - pay attention to the copper line directions.  
-Solder all necessary components and wires as shown in the image. The ground wires are only indicated (read the red comment) to keep the image tidy.
+Solder all necessary components and wires as shown in the verboard image below and the schematics above. The ground wires are only indicated (read the red comment) to keep the image tidy.
 
 ![syncBlink - Veroboard](https://raw.githubusercontent.com/syncBlink/station/master/img/syncBlink-Veroboard.png)
 
@@ -91,7 +90,7 @@ Mount the Wemos D1 Mini to the *Bottom* part of the shell.
 
 ![syncBlink - Mounted](https://raw.githubusercontent.com/syncBlink/station/master/img/mounted.jpg)
 
-Power the Wemos and insert a *MOD*. You should see the *decibel* in the top right of the display. Set the gain of you microphone with a small screwdriver. It should float between -40 and -43dB in a silent room. If done, place the stripboard into the shell, place one of the *divider* parts on top of the *bottom* part, then place the *middle* part on top of it. Followed by an additional *divider* and the *top* part.
+All components should be connected and you should be able to power the Wemos. You will see the *decibel* in the top right of the display. Set the gain of you microphone with a small screwdriver. It should float between -40 and -43dB in a silent room. If done, place the stripboard into the shell, place one of the *divider* parts on top of the *bottom* part, then place the *middle* part on top of it. Followed by an additional *divider* and the *top* part.
 Insert the *bolts* into the four holes and use the M2x12mm screws to close the shell. Your **syncBlink Station** is done!
 
 ### The Application

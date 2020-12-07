@@ -106,7 +106,7 @@ namespace SyncBlink
         uint rawSource = EEPROM.read(193);
         if(rawSource != 0 && rawSource != 1) {
             Serial.println("Currently active source not valid! Falling back ...");
-            saveActiveSource(AnalyzerSource::Base);
+            saveActiveSource(AnalyzerSource::Station);
         }
         return static_cast<AnalyzerSource>(EEPROM.read(193));
     }
