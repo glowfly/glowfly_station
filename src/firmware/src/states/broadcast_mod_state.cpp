@@ -17,10 +17,10 @@ namespace SyncBlink
                 : _context(context), _mod(mod)
             {
                 _handleId = context.getSocketServer()
-                    .serverCommandEvents
-                    .addEventHandler([this](Server::Command command) 
+                    .serverMessageEvents
+                    .addEventHandler([this](Server::Message message) 
                     { 
-                        _modDistributed = command.commandType == Server::MOD_DISTRIBUTED; 
+                        _modDistributed = message.messageType == Server::MOD_DISTRIBUTED; 
                     });
                 _broadcastModView = std::make_shared<IconTextView>("Broadcasting MOD ...", u8g2_font_open_iconic_thing_2x_t, 74);
             }
@@ -28,7 +28,7 @@ namespace SyncBlink
             ~BroadcastModState()
             {
                 _context.getSocketServer()
-                    .serverCommandEvents
+                    .serverMessageEvents
                     .removeEventHandler(_handleId);
             }
 
@@ -51,10 +51,10 @@ namespace SyncBlink
                     scriptContext->updateLedInfo(0, 0, context.getMeshLedCount());
                     scriptContext->init();
 
-                    Client::SourceCommand sourceCommand = { scriptContext->source };
-                    Client::Command command = { millis(), Client::SOURCE_UPDATE };
-                    command.sourceCommand = sourceCommand;
-                    context.getSocketServer().broadcast(command);
+                    Client::SourceMessage sourceMessage = { scriptContext->source };
+                    Client::Message message = { millis(), Client::SOURCE_UPDATE };
+                    message.sourceMessage = sourceMessage;
+                    context.getSocketServer().broadcast(message);
 
                     context.getLed().setAllLeds(SyncBlink::Black);
                     context.currentState = std::make_shared<RunModState>(context, scriptContext);

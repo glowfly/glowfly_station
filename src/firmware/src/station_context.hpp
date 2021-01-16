@@ -33,7 +33,7 @@ namespace SyncBlink
         private:
             void startMeshCount();
             void onSocketServerMeshConnection();
-            void onSocketServerCommandReceived(Server::Command command);
+            void onSocketServerCommandReceived(Server::Message message);
 
             LED _led;
             Display _display;

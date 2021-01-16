@@ -4,8 +4,8 @@
 #include <mappings.hpp>
 #include <visualization/script_context.hpp>
 #include <visualization/frequency_analyzer.hpp>
-#include <network/websocket/commands/analyzer_command.hpp>
-#include <network/websocket/commands/server_commands.hpp>
+#include <network/websocket/messages/audio_analyzer_message.hpp>
+#include <network/websocket/messages/server_messages.hpp>
 
 #include "state.hpp"
 #include "states/invalid_mod_state.cpp"
@@ -21,8 +21,8 @@ namespace SyncBlink
                 : _context(context), _scriptContext(scriptContext)
             {
                 _socketEventHandleId = context.getSocketServer()
-                    .serverCommandEvents
-                    .addEventHandler([this](Server::Command command) 
+                    .serverMessageEvents
+                    .addEventHandler([this](Server::Message command) 
                     { 
                         handleExternalSource(command); 
                     });
@@ -39,7 +39,7 @@ namespace SyncBlink
             ~RunModState()
             {
                 _context.getSocketServer()
-                    .serverCommandEvents
+                    .serverMessageEvents
                     .removeEventHandler(_socketEventHandleId);
                 _context.getModManager()
                     .activeModChangedEvents
@@ -58,14 +58,14 @@ namespace SyncBlink
         private:
             void handleMicrophoneSource(SocketServer& socketServer)
             {   
-                if(checkScriptContext() && _scriptContext->source == AnalyzerSource::Station)
+                if(checkScriptContext() && _scriptContext->source == AudioAnalyzerSource::Station)
                 {
-                    AnalyzerResult result = _frequencyAnalyzer.loop();
-                    Client::Command command = { millis(), Client::ANALYZER_UPDATE };
-                    command.analyzerCommand = result.ToCommand();
+                    AudioAnalyzerResult result = _frequencyAnalyzer.loop();
+                    Client::Message message = { millis(), Client::ANALYZER_UPDATE };
+                    message.analyzerMessage = result.ToMessage();
 
-                    socketServer.broadcast(command);
-                    setView(command.analyzerCommand);
+                    socketServer.broadcast(message);
+                    setView(message.analyzerMessage);
 
                     uint32_t delta = millis() - _lastLedUpdate;
                     _lastLedUpdate = millis();
@@ -75,22 +75,22 @@ namespace SyncBlink
                 }
             }
 
-            void handleExternalSource(Server::Command& serverCommand)
+            void handleExternalSource(Server::Message& serverMessage)
             {
                 if(checkScriptContext()
-                && _scriptContext->source != AnalyzerSource::Station
-                && serverCommand.commandType == Server::CommandType::EXTERNAL_ANALYZER)
+                && _scriptContext->source != AudioAnalyzerSource::Station
+                && serverMessage.messageType == Server::MessageType::EXTERNAL_ANALYZER)
                 {
-                    Client::Command command = { millis(), Client::ANALYZER_UPDATE };
-                    command.analyzerCommand = serverCommand.analyzerCommand;
+                    Client::Message message = { millis(), Client::ANALYZER_UPDATE };
+                    message.analyzerMessage = serverMessage.audioAnalyzerMessage;
 
-                    _context.getSocketServer().broadcast(command);
-                    setView(command.analyzerCommand);
+                    _context.getSocketServer().broadcast(message);
+                    setView(message.analyzerMessage);
 
                     uint32_t delta = millis() - _lastLedUpdate;
                     _lastLedUpdate = millis();
 
-                    _scriptContext->updateAnalyzerResult(command.analyzerCommand.volume, command.analyzerCommand.frequency);
+                    _scriptContext->updateAnalyzerResult(message.analyzerMessage.volume, message.analyzerMessage.frequency);
                     _scriptContext->run(delta);
                 }
             }
@@ -106,14 +106,14 @@ namespace SyncBlink
                 return valid;
             }
 
-            void setView(AnalyzerCommand& command)
+            void setView(AudioAnalyzerMessage& message)
             {
-                _runModView->volume = command.volume;
-                _runModView->decibel = command.decibel;
-                if(command.volume > 0 && command.frequency > 0)
+                _runModView->volume = message.volume;
+                _runModView->decibel = message.decibel;
+                if(message.volume > 0 && message.frequency > 0)
                 {
-                    _runModView->dominantFrequency = command.frequency;
-                    _runModView->setFreqBars(command.freqBins);
+                    _runModView->dominantFrequency = message.frequency;
+                    _runModView->setFreqBars(message.freqBins);
                 }
                 else
                 {

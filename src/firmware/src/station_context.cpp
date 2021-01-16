@@ -14,14 +14,12 @@ namespace SyncBlink
         _display.init();
         _display.setView(std::make_shared<SyncBlink::SplashView>());
         _display.loop();
-        
         _socketServer
-            .serverCommandEvents
-            .addEventHandler([this](Server::Command command) { onSocketServerCommandReceived(command); });
+            .serverMessageEvents
+            .addEventHandler([this](Server::Message message) { onSocketServerCommandReceived(message); });
         _socketServer
             .meshConnectionEvents
             .addEventHandler([this]() { onSocketServerMeshConnection(); });
-
         _wifi.connectWifi();
     }
 
@@ -29,12 +27,13 @@ namespace SyncBlink
     {        
         _display.setLeftStatus("");
         _display.setRightStatus(WiFi.localIP().toString().c_str());
-        
         currentState->run(*this);
         _socketServer.loop();
         _led.loop();
         _web.loop();
         _display.loop();
+
+        std::unique_ptr<ReadModState> test(ReadModState);
     }
 
     void StationContext::resetState() 
@@ -53,11 +52,11 @@ namespace SyncBlink
         }
         else
         {
-            Client::CountCommand countCommand = { LED_COUNT, LED_COUNT, 1 };
-            Client::Command command = { millis(), Client::MESH_COUNT_REQUEST };
-            command.countCommand = countCommand;
+            Client::CountMessage countMessage = { LED_COUNT, LED_COUNT, 1 };
+            Client::Message message = { millis(), Client::MESH_COUNT_REQUEST };
+            message.countMessage = countMessage;
             
-            _socketServer.broadcast(command);
+            _socketServer.broadcast(message);
         }
     }
 
@@ -66,24 +65,24 @@ namespace SyncBlink
         startMeshCount();
     }
 
-    void StationContext::onSocketServerCommandReceived(Server::Command command)
+    void StationContext::onSocketServerCommandReceived(Server::Message message)
     {
-        Client::Command updateCommand;
-        Client::CountCommand countCommand;
-        switch (command.commandType)
+        Client::Message updateMessage;
+        Client::CountMessage countMessage;
+        switch (updateMessage.messageType)
         {
             case Server::MESH_CONNECTION:
                 startMeshCount();
                 break;
             case Server::MESH_COUNTED:
-                _meshLedCount = command.countedCommand.meshLedCount;
+                _meshLedCount = updateMessage.countMessage.meshLedCount;
                 Serial.printf("MESH_COUNT done with %d LEDs on the longest route.\n", _meshLedCount);
                 Serial.println("Distributing result of count ...");
 
-                countCommand = { _meshLedCount, LED_COUNT, 1 };
-                updateCommand = { millis(), Client::MESH_UPDATE };
-                updateCommand.countCommand = countCommand;
-                _socketServer.broadcast(updateCommand);
+                countMessage = { _meshLedCount, LED_COUNT, 1 };
+                updateMessage = { millis(), Client::MESH_UPDATE };
+                updateMessage.countMessage = countMessage;
+                _socketServer.broadcast(updateMessage);
                 break;
             case Server::MESH_UPDATED:
                 Serial.println("Mesh updated - Resetting state ...");

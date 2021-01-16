@@ -17,4 +17,16 @@ function update(delta){
     setAllLeds(color);
 }
 
-function getName() { return "simpleMod"; }
+let h=0
+let s=0
+let v=0
+
+let update = fun(delta) {
+    if(vol == 0 || freq == 0 || vol < lVol) {
+        
+    }
+	setAllLeds(12255470)	
+}
+
+let init = fun(){}
+let modName = "simpleMod"

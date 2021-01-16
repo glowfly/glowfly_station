@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#include <network/websocket/commands/analyzer_command.hpp>
+#include <network/websocket/messages/audio_analyzer_message.hpp>
 #include <event_registration.hpp>
 #include "mod.hpp"
 
@@ -24,8 +24,8 @@ namespace SyncBlink
             std::string getActiveModName();
             void saveActiveModName(std::string modName);
             
-            AnalyzerSource getActiveSource();
-            void saveActiveSource(AnalyzerSource source);
+            AudioAnalyzerSource getActiveSource();
+            void saveActiveSource(AudioAnalyzerSource source);
 
             EventRegistration<ActiveModChangedEvent> activeModChangedEvents;
 

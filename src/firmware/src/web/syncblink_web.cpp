@@ -1,6 +1,6 @@
 #include <LittleFS.h>
 #include <ArduinoJson.h>
-#include <network/websocket/commands/analyzer_command.hpp>
+#include <network/websocket/messages/audio_analyzer_message.hpp>
 
 #include "syncblink_web.hpp"
 
@@ -126,7 +126,7 @@ namespace SyncBlink
     void SyncBlinkWeb::getModSettings()
     {
         std::string activeMod = _modManager.getActiveModName();
-        AnalyzerSource activeSource = _modManager.getActiveSource();
+        AudioAnalyzerSource activeSource = _modManager.getActiveSource();
 
         String JSON;
         StaticJsonDocument<1000> jsonBuffer;
@@ -149,7 +149,7 @@ namespace SyncBlink
 
         if(_modManager.get(modName).Exists && (source == 0 || source == 1)) {
             _modManager.saveActiveModName(modName);
-            _modManager.saveActiveSource(static_cast<AnalyzerSource>(source));
+            _modManager.saveActiveSource(static_cast<AudioAnalyzerSource>(source));
             _server.send(200, "application/json", "{ \"saved\": true }");
         }
         else {
