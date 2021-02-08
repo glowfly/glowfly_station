@@ -24,7 +24,7 @@ namespace SyncBlink
     }
 
     void StationContext::loop()
-    {        
+    {
         _display.setLeftStatus("");
         _display.setRightStatus(WiFi.localIP().toString().c_str());
         currentState->run(*this);
@@ -32,8 +32,6 @@ namespace SyncBlink
         _led.loop();
         _web.loop();
         _display.loop();
-
-        std::unique_ptr<ReadModState> test(ReadModState);
     }
 
     void StationContext::resetState() 
@@ -69,13 +67,13 @@ namespace SyncBlink
     {
         Client::Message updateMessage;
         Client::CountMessage countMessage;
-        switch (updateMessage.messageType)
+        switch (message.messageType)
         {
             case Server::MESH_CONNECTION:
                 startMeshCount();
                 break;
             case Server::MESH_COUNTED:
-                _meshLedCount = updateMessage.countMessage.meshLedCount;
+                _meshLedCount = message.countedMessage.meshLedCount;
                 Serial.printf("MESH_COUNT done with %d LEDs on the longest route.\n", _meshLedCount);
                 Serial.println("Distributing result of count ...");
 

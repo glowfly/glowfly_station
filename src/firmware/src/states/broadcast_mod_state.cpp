@@ -1,7 +1,7 @@
 #ifndef BROADCASTMODSTATE_H
 #define BROADCASTMODSTATE_H
 
-#include <visualization/script_context.hpp>
+#include <blinkscript/blink_script.hpp>
 #include "run_mod_state.cpp"
 #include "invalid_mod_state.cpp"
 #include "state.hpp"
@@ -47,17 +47,17 @@ namespace SyncBlink
 
                 if(_modDistributed)
                 {
-                    auto scriptContext = std::make_shared<ScriptContext>(context.getLed(), _mod);
-                    scriptContext->updateLedInfo(0, 0, context.getMeshLedCount());
-                    scriptContext->init();
+                    auto blinkScript = std::make_shared<BlinkScript>(context.getLed(), _mod);
+                    blinkScript->updateLedInfo(0, 0, context.getMeshLedCount());
+                    blinkScript->init();
 
-                    Client::SourceMessage sourceMessage = { scriptContext->source };
+                    Client::SourceMessage sourceMessage = { context.getModManager().getActiveSource() };
                     Client::Message message = { millis(), Client::SOURCE_UPDATE };
                     message.sourceMessage = sourceMessage;
                     context.getSocketServer().broadcast(message);
 
                     context.getLed().setAllLeds(SyncBlink::Black);
-                    context.currentState = std::make_shared<RunModState>(context, scriptContext);
+                    context.currentState = std::make_shared<RunModState>(context, blinkScript);
 
                     _modDistributed = false;
                     _broadcastStarted = false;

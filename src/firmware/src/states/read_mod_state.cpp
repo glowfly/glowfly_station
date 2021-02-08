@@ -1,7 +1,7 @@
 #ifndef READMODSTATE_H
 #define READMODSTATE_H
 
-#include <visualization/script_context.hpp>
+#include <blinkscript/blink_script.hpp>
 
 #include "state.hpp"
 #include "broadcast_mod_state.cpp"
@@ -33,11 +33,11 @@ namespace SyncBlink
 
                 if(activeMod.Exists)
                 {
-                    ScriptContext scriptContext = ScriptContext(context.getLed(), activeMod.Content);                    
-                    if(!scriptContext.isFaulted()) context.currentState = std::make_shared<BroadcastModState>(context, activeMod.Content);
-                    else context.currentState = std::make_shared<InvalidModState>();
+                    BlinkScript blinkScript = BlinkScript(context.getLed(), activeMod.Content);                    
+                    if(!blinkScript.isFaulted()) context.currentState = std::make_shared<BroadcastModState>(context, activeMod.Content);
+                    else context.currentState = std::make_shared<InvalidModState>(context);
                 }
-                else context.currentState = std::make_shared<InvalidModState>();     
+                else context.currentState = std::make_shared<InvalidModState>(context);     
             }
 
         private:

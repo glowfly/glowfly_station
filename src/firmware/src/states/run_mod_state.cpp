@@ -2,8 +2,8 @@
 #define RUNMODSTATE_H
 
 #include <mappings.hpp>
-#include <visualization/script_context.hpp>
-#include <visualization/frequency_analyzer.hpp>
+#include <blinkscript/blink_script.hpp>
+#include <audio/frequency_analyzer.hpp>
 #include <network/websocket/messages/audio_analyzer_message.hpp>
 #include <network/websocket/messages/server_messages.hpp>
 
@@ -17,8 +17,8 @@ namespace SyncBlink
     class RunModState : public State
     {
         public:
-            RunModState(StationContext& context, std::shared_ptr<ScriptContext> scriptContext) 
-                : _context(context), _scriptContext(scriptContext)
+            RunModState(StationContext& context, std::shared_ptr<BlinkScript> blinkScript) 
+                : _context(context), _blinkScript(blinkScript)
             {
                 _socketEventHandleId = context.getSocketServer()
                     .serverMessageEvents
@@ -33,7 +33,7 @@ namespace SyncBlink
                         _activeModChanged = true;
                     });
                 _runModView = std::make_shared<RunModView>();
-                _modName = _scriptContext->getModName();
+                _modName = _blinkScript->getModName();
             }
 
             ~RunModState()
@@ -58,7 +58,7 @@ namespace SyncBlink
         private:
             void handleMicrophoneSource(SocketServer& socketServer)
             {   
-                if(checkScriptContext() && _scriptContext->source == AudioAnalyzerSource::Station)
+                if(checkBlinkScript() && _context.getModManager().getActiveSource() == AudioAnalyzerSource::Station)
                 {
                     AudioAnalyzerResult result = _frequencyAnalyzer.loop();
                     Client::Message message = { millis(), Client::ANALYZER_UPDATE };
@@ -70,15 +70,15 @@ namespace SyncBlink
                     uint32_t delta = millis() - _lastLedUpdate;
                     _lastLedUpdate = millis();
 
-                    _scriptContext->updateAnalyzerResult(result.volume, result.dominantFrequency);
-                    _scriptContext->run(delta);
+                    _blinkScript->updateAnalyzerResult(result.volume, result.dominantFrequency);
+                    _blinkScript->run(delta);
                 }
             }
 
             void handleExternalSource(Server::Message& serverMessage)
             {
-                if(checkScriptContext()
-                && _scriptContext->source != AudioAnalyzerSource::Station
+                if(checkBlinkScript()
+                && _context.getModManager().getActiveSource() != AudioAnalyzerSource::Station
                 && serverMessage.messageType == Server::MessageType::EXTERNAL_ANALYZER)
                 {
                     Client::Message message = { millis(), Client::ANALYZER_UPDATE };
@@ -90,17 +90,17 @@ namespace SyncBlink
                     uint32_t delta = millis() - _lastLedUpdate;
                     _lastLedUpdate = millis();
 
-                    _scriptContext->updateAnalyzerResult(message.analyzerMessage.volume, message.analyzerMessage.frequency);
-                    _scriptContext->run(delta);
+                    _blinkScript->updateAnalyzerResult(message.analyzerMessage.volume, message.analyzerMessage.frequency);
+                    _blinkScript->run(delta);
                 }
             }
 
-            bool checkScriptContext()
+            bool checkBlinkScript()
             {
                 bool valid = true;
-                if(_scriptContext->isFaulted())
+                if(_blinkScript->isFaulted())
                 {
-                    _context.currentState = std::make_shared<InvalidModState>();
+                    _context.currentState = std::make_shared<InvalidModState>(_context);
                     valid = false;
                 }
                 return valid;
@@ -123,7 +123,7 @@ namespace SyncBlink
             }
 
             StationContext& _context;
-            std::shared_ptr<ScriptContext> _scriptContext;
+            std::shared_ptr<BlinkScript> _blinkScript;
             std::shared_ptr<RunModView> _runModView;
             uint64_t _socketEventHandleId = 0, _modEventHandleId = 0;
             std::string _modName;

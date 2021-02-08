@@ -1,10 +1,11 @@
 #include <EEPROM.h>
 #include <LittleFS.h>
 #include "mod_manager.hpp"
+#include "station_context.hpp"
 
 namespace SyncBlink
 {
-    Mod ModManager::get(std::string& modName)
+    Mod ModManager::get(const std::string& modName)
     {
         Mod mod;
         mod.Name = modName;
@@ -40,37 +41,43 @@ namespace SyncBlink
         return modList;
     }
 
-    void ModManager::add(std::string& modName)
+    void ModManager::add(const std::string& modName)
     {
         File file = LittleFS.open(("/mods/" + modName).c_str(), "w");
         file.close();
     }
 
-    void ModManager::save(std::string modName, std::string modContent)
+    void ModManager::save(const std::string& modName, const std::string& modContent)
     {
         File file = LittleFS.open(("/mods/" + modName).c_str(), "w");
         file.print(modContent.c_str());
         file.close();
-
+        
         if(getActiveModName() == modName)
         {
             for(auto event : activeModChangedEvents.getEventHandlers()) event.second();
         }
     }
 
-    void ModManager::remove(std::string& modName)
+    void ModManager::remove(const std::string& modName)
     {
         LittleFS.remove(("/mods/" + modName).c_str());
     }
 
     std::string ModManager::getActiveModName()
     {
-        std::string activeMod;
-        for (int i = 96; i < 193; ++i)
+        int i = 0;
+        char data[SyncBlink::ModRomLength];
+        char curChar = char(EEPROM.read(i + SyncBlink::ModRomStart));
+
+        while (i < SyncBlink::ModRomLength && curChar != '\0')
         {
-            activeMod += char(EEPROM.read(i));
+            curChar = char(EEPROM.read(i + SyncBlink::ModRomStart));
+            data[i] = curChar;
+            i++;
         }
-        Serial.printf("Saved Active MOD: %s\n", activeMod.c_str());
+        std::string activeMod(data);
+        Serial.printf("Active MOD: %s\n", activeMod.c_str());
 
         Mod mod = get(activeMod);
         if(!mod.Exists) 
@@ -83,18 +90,18 @@ namespace SyncBlink
                 activeMod = getActiveModName();
             }
         }
-        return activeMod.c_str();
+        return activeMod;
     }
 
-    void ModManager::saveActiveModName(std::string modName)
+    void ModManager::saveActiveModName(const std::string& modName)
     {
         if (modName.length() > 0) 
         {
             Serial.println("Clearing active Mod ...");
-            for (int i = 96; i < 193; ++i) { EEPROM.write(i, 0); }
+            for (int i = SyncBlink::ModRomStart; i < SyncBlink::ModRomEnd; ++i) { EEPROM.write(i, 0); }
 
             Serial.printf("Saving active Mod (%s) ...\n", modName.c_str());
-            for (uint i = 0; i < modName.length(); ++i) EEPROM.write(i + 96, modName[i]);
+            for (uint i = 0; i < modName.length(); ++i) EEPROM.write(i + SyncBlink::ModRomStart, modName[i]);
 
             EEPROM.commit();
             for(auto event : activeModChangedEvents.getEventHandlers()) event.second();
@@ -103,18 +110,18 @@ namespace SyncBlink
 
     AudioAnalyzerSource ModManager::getActiveSource()
     {
-        uint rawSource = EEPROM.read(193);
+        uint rawSource = EEPROM.read(SyncBlink::SourceRom);
         if(rawSource != 0 && rawSource != 1) {
             Serial.println("Currently active source not valid! Falling back ...");
             saveActiveSource(AudioAnalyzerSource::Station);
         }
-        return static_cast<AudioAnalyzerSource>(EEPROM.read(193));
+        return static_cast<AudioAnalyzerSource>(EEPROM.read(SyncBlink::SourceRom));
     }
 
     void ModManager::saveActiveSource(AudioAnalyzerSource source)
     {
         Serial.printf("Saving active Source (%d) ...\n", source);
-        EEPROM.write(193, static_cast<uint>(source));
+        EEPROM.write(SyncBlink::SourceRom, static_cast<uint>(source));
         EEPROM.commit();
     }
 }

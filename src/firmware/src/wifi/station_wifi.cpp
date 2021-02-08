@@ -1,5 +1,6 @@
 #include <EEPROM.h>
 #include "station_wifi.hpp"
+#include "station_context.hpp"
 
 namespace SyncBlink
 {
@@ -42,14 +43,14 @@ namespace SyncBlink
         if (ssid.length() > 0 && pass.length() > 0) 
         {
             Serial.println("Clearing SSID ...");
-            for (int i = 0; i < 96; ++i) { EEPROM.write(i, 0); }
+            for (int i = SyncBlink::WifiRomSSIDStart; i < SyncBlink::WifiRomPwEnd; ++i) { EEPROM.write(i, 0); }
         }
 
         Serial.printf("Writing SSID (%s) ...\n", ssid.c_str());
-        for (uint i = 0; i < ssid.length(); ++i) EEPROM.write(i, ssid[i]);
+        for (uint i = 0; i < ssid.length(); ++i) EEPROM.write(SyncBlink::WifiRomSSIDStart + 1, ssid[i]);
 
         Serial.printf("Writing Password (%s)\n ...", pass.c_str()); 
-        for (uint i = 0; i < pass.length(); ++i) EEPROM.write(32 + i, pass[i]);
+        for (uint i = 0; i < pass.length(); ++i) EEPROM.write(SyncBlink::WifiRomPwStart + i, pass[i]);
 
         EEPROM.commit();
         ESP.restart();
@@ -57,23 +58,37 @@ namespace SyncBlink
 
     std::string StationWifi::getSavedSSID()
     {
-        std::string ssid;
-        for (int i = 0; i < 32; ++i)
+        int i = 0;
+        char data[SyncBlink::WifiRomSSIDLength];
+        char curChar = char(EEPROM.read(i + SyncBlink::WifiRomSSIDStart));
+
+        while (i < SyncBlink::WifiRomSSIDLength && curChar != '\0')
         {
-            ssid += char(EEPROM.read(i));
+            curChar = char(EEPROM.read(i + SyncBlink::WifiRomSSIDStart));
+            data[i] = curChar;
+            i++;
         }
+        std::string ssid(data);
         Serial.printf("SSID: %s\n", ssid.c_str());
+
         return ssid;
     }
 
     std::string StationWifi::getSavedPass()
     {
-        std::string password;
-        for (int i = 32; i < 96; ++i)
+        int i = 0;
+        char data[SyncBlink::WifiRomPwLength];
+        char curChar = char(EEPROM.read(i + SyncBlink::WifiRomPwStart));
+
+        while (i < SyncBlink::WifiRomPwLength && curChar != '\0')
         {
-            password += char(EEPROM.read(i));
+            curChar = char(EEPROM.read(i + SyncBlink::WifiRomPwStart));
+            data[i] = curChar;
+            i++;
         }
+        std::string password(data);
         Serial.printf("Password: %s\n", password.c_str());
+
         return password;
     }
 }

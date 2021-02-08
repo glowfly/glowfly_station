@@ -14,15 +14,15 @@ namespace SyncBlink
     class ModManager
     {
         public:
-            Mod get(std::string& modName);
+            Mod get(const std::string& modName);
             std::vector<std::string> getList();
             
-            void add(std::string& modName);
-            void save(std::string modName, std::string modContent);
-            void remove(std::string& modName);
+            void add(const std::string& modName);
+            void save(const std::string& modName, const std::string& modContent);
+            void remove(const std::string& modName);
 
             std::string getActiveModName();
-            void saveActiveModName(std::string modName);
+            void saveActiveModName(const std::string& modName);
             
             AudioAnalyzerSource getActiveSource();
             void saveActiveSource(AudioAnalyzerSource source);
